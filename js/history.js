@@ -1,0 +1,193 @@
+// The Hall of Heads: historical figures the awards are named after.
+(function () {
+  const G = (window.G = window.G || {});
+
+  G.FIGURES = {
+    marie: {
+      name: 'Marie Antoinette',
+      date: '16 October 1793',
+      place: 'Place de la Révolution, Paris',
+      method: 'Guillotine',
+      fact: 'The last Queen of France stepped on the executioner’s foot on her way to the blade and apologised. “Let them eat cake” was almost certainly never hers.',
+      quote: 'Pardon me, sir. I did not do it on purpose.',
+    },
+    louis: {
+      name: 'Louis XVI',
+      date: '21 January 1793',
+      place: 'Place de la Révolution, Paris',
+      method: 'Guillotine',
+      fact: 'A keen amateur locksmith. Legend holds that he suggested the angled blade that made the guillotine reliable, helping design the machine that killed him.',
+    },
+    robespierre: {
+      name: 'Maximilien Robespierre',
+      date: '28 July 1794',
+      place: 'Place de la Révolution, Paris',
+      method: 'Guillotine',
+      fact: 'Architect of the Reign of Terror, who sent thousands to the scaffold. His own turn came the day after his arrest, his jaw shattered by a pistol shot.',
+    },
+    danton: {
+      name: 'Georges Danton',
+      date: '5 April 1794',
+      place: 'Place de la Révolution, Paris',
+      method: 'Guillotine',
+      fact: 'A giant of the early Revolution, devoured by it. He instructed the executioner to display his head to the crowd.',
+      quote: 'Show my head to the people. It is worth seeing.',
+    },
+    lavoisier: {
+      name: 'Antoine Lavoisier',
+      date: '8 May 1794',
+      place: 'Place de la Révolution, Paris',
+      method: 'Guillotine',
+      fact: 'Father of modern chemistry, executed for his role as a tax collector. The judge’s line “The Republic has no need of savants” is probably apocryphal, as is the tale that he blinked after the blade fell.',
+    },
+    dubarry: {
+      name: 'Madame du Barry',
+      date: '8 December 1793',
+      place: 'Place de la Révolution, Paris',
+      method: 'Guillotine',
+      fact: 'The last mistress of Louis XV. Unlike the stoic nobles before her, she screamed and pleaded all the way up the scaffold.',
+      quote: 'One more moment, Mr. Executioner!',
+    },
+    corday: {
+      name: 'Charlotte Corday',
+      date: '17 July 1793',
+      place: 'Place de la Révolution, Paris',
+      method: 'Guillotine',
+      fact: 'Assassinated Jean-Paul Marat in his bathtub. After the blade fell, an assistant slapped her severed head, and witnesses swore it blushed.',
+    },
+    anne: {
+      name: 'Anne Boleyn',
+      date: '19 May 1536',
+      place: 'Tower of London',
+      method: 'Sword',
+      fact: 'Henry VIII spared her the clumsy English axe and sent for an expert swordsman from Calais. One clean stroke.',
+      quote: 'I have a little neck.',
+    },
+    mary: {
+      name: 'Mary, Queen of Scots',
+      date: '8 February 1587',
+      place: 'Fotheringhay Castle',
+      method: 'Axe',
+      fact: 'The executioner needed more than one blow. When he lifted her head it slipped out of her auburn wig, and her little dog was found hiding in her skirts.',
+    },
+    charles: {
+      name: 'Charles I',
+      date: '30 January 1649',
+      place: 'Banqueting House, Whitehall',
+      method: 'Axe',
+      fact: 'Wore two shirts on that freezing morning so the crowd would not see him shiver and mistake it for fear.',
+    },
+    more: {
+      name: 'Sir Thomas More',
+      date: '6 July 1535',
+      place: 'Tower Hill, London',
+      method: 'Axe',
+      fact: 'Moved his beard off the block before the axe fell, joking that his beard at least had committed no treason.',
+    },
+    raleigh: {
+      name: 'Sir Walter Raleigh',
+      date: '29 October 1618',
+      place: 'Old Palace Yard, Westminster',
+      method: 'Axe',
+      fact: 'Explorer and treasure-hunter who chased El Dorado. He tested the axe’s edge before his execution. His widow kept his embalmed head for the rest of her life.',
+      quote: 'This is sharp medicine, but it is a physician for all diseases.',
+    },
+    janegrey: {
+      name: 'Lady Jane Grey',
+      date: '12 February 1554',
+      place: 'Tower of London',
+      method: 'Axe',
+      fact: 'Proclaimed Queen of England in July 1553 and deposed nine days later. A teenager when she went to the block.',
+    },
+    paine: {
+      name: 'Thomas Paine',
+      date: 'Escaped, 1794',
+      place: 'Luxembourg Prison, Paris',
+      method: 'None. He got lucky.',
+      fact: 'Condemned cells were chalk-marked on the door. Paine’s door stood open when the jailer came by, so the mark went on the inside. When the door was shut, the mark was hidden, and death passed him by.',
+    },
+    guillotin: {
+      name: 'Dr. Joseph-Ignace Guillotin',
+      date: 'Died of natural causes, 1814',
+      place: 'Paris',
+      method: 'None',
+      fact: 'Proposed a single, swift, painless method of execution in 1789 as a humane reform. He opposed the death penalty itself. His family begged the state to rename the machine and ended up changing their own name instead.',
+    },
+    sanson: {
+      name: 'Charles-Henri Sanson',
+      date: 'Royal Executioner of Paris',
+      place: 'Paris',
+      method: 'The one holding the rope',
+      fact: 'Executioner of Louis XVI and thousands more. By old custom, an executioner could claim the clothes and belongings of the condemned.',
+    },
+    denis: {
+      name: 'Saint Denis',
+      date: '3rd century',
+      place: 'Montmartre, Paris',
+      method: 'Sword',
+      fact: 'The first bishop of Paris. After his beheading, legend says, he picked up his own head and walked some six miles, preaching the whole way.',
+    },
+    mike: {
+      name: 'Mike the Headless Chicken',
+      date: 'September 1945',
+      place: 'Fruita, Colorado',
+      method: 'Hatchet (incomplete)',
+      fact: 'The farmer’s axe missed the brain stem. Mike lived another 18 months without a head, fed with an eyedropper, and toured the country as a sideshow. All that life, and none of it useful.',
+    },
+    horseman: {
+      name: 'The Headless Horseman',
+      date: '1820',
+      place: 'Sleepy Hollow, New York',
+      method: 'Cannonball, allegedly',
+      fact: 'Washington Irving’s phantom rider: a soldier who lost his head to a cannonball and rides out every night looking for it. Shows up. Contributes nothing.',
+    },
+    committee: {
+      name: 'The Committee of Public Safety',
+      date: '1793–1795',
+      place: 'Paris',
+      method: 'Signing the warrants',
+      fact: 'The twelve men who ran the Terror. They decided who lived and who rode the tumbril to the Place de la Révolution.',
+    },
+    djandoubi: {
+      name: 'Hamida Djandoubi',
+      date: '10 September 1977',
+      place: 'Baumettes Prison, Marseille',
+      method: 'Guillotine',
+      fact: 'The last person executed by guillotine in France, and the last in the Western world. France abolished the death penalty in 1981.',
+    },
+  };
+
+  // Chopped managers are "executed in the manner of" these figures, in order.
+  G.EXECUTION_ORDER = [
+    'marie', 'louis', 'anne', 'mary', 'charles', 'more', 'raleigh', 'janegrey',
+    'danton', 'dubarry', 'corday', 'lavoisier', 'robespierre', 'denis', 'djandoubi',
+  ];
+
+  // Award definitions. `pol` is glory (good) or shame (bad).
+  G.AWARDS = {
+    robespierre: { title: 'Reign of Terror', pol: 'glory', fig: 'robespierre', blurb: 'Top score of the week. Enjoy the power while it lasts.' },
+    paine: { title: 'The Chalk Mark', pol: 'glory', fig: 'paine', blurb: 'Survived by the narrowest margin. The mark was on the wrong side of the door.' },
+    guillotin: { title: 'The Humane Machine', pol: 'glory', fig: 'guillotin', blurb: 'Best lineup efficiency: points scored out of the best possible lineup.' },
+    anne: { title: 'The Swordsman of Calais', pol: 'glory', fig: 'anne', blurb: 'Best single-player performance in any starting lineup.' },
+    denis: { title: 'Walked Off With His Head', pol: 'glory', fig: 'denis', blurb: 'Biggest jump in points from the week before.' },
+    dubarry: { title: 'One More Moment', pol: 'shame', fig: 'dubarry', blurb: 'Chopped this week. Begged all the way up the scaffold.' },
+    more: { title: 'The Innocent Beard', pol: 'shame', fig: 'more', blurb: 'Best player on the chopped team. He did nothing wrong.' },
+    louis: { title: 'The Locksmith King', pol: 'shame', fig: 'louis', blurb: 'Worst lineup efficiency. Designed his own blade.' },
+    mike: { title: 'The Headless Chicken', pol: 'shame', fig: 'mike', blurb: 'Most points left rotting on the bench.' },
+    horseman: { title: 'The Headless Horseman', pol: 'shame', fig: 'horseman', blurb: 'Most starters who put up a zero, or an empty slot.' },
+    janegrey: { title: 'The Nine Days’ Queen', pol: 'shame', fig: 'janegrey', blurb: 'Last week’s top scorer, now in the bottom half.' },
+    // Season-long
+    committee: { title: 'Committee of Public Safety', pol: 'glory', fig: 'committee', blurb: 'Most total points among the living.' },
+    charles: { title: 'The Two Shirts', pol: 'glory', fig: 'charles', blurb: 'Most consistent scorer. Never lets them see you shiver.' },
+    chalk: { title: 'Luxembourg Prison Regular', pol: 'glory', fig: 'paine', blurb: 'Most narrow escapes: finished one spot above the chopped team.' },
+    sanson: { title: 'The Executioner’s Due', pol: 'glory', fig: 'sanson', blurb: 'Most players looted from the corpses of the chopped.' },
+    lavoisier: { title: 'The Savant', pol: 'glory', fig: 'lavoisier', blurb: 'Most starting points from waiver and free-agent pickups.' },
+    raleigh: { title: 'Sharp Medicine', pol: 'glory', fig: 'raleigh', blurb: 'Biggest single waiver bid. Chasing El Dorado.' },
+    mary: { title: 'Three Blows of the Axe', pol: 'shame', fig: 'mary', blurb: 'Most bottom-three finishes while somehow surviving.' },
+    marie: { title: 'Let Them Eat Cake', pol: 'shame', fig: 'marie', blurb: 'Most FAAB spent. The treasury is for spending.' },
+    mikeSeason: { title: 'Eighteen Months Headless', pol: 'shame', fig: 'mike', blurb: 'Most total bench points this season.' },
+  };
+
+  G.WEEKLY_AWARD_ORDER = ['robespierre', 'paine', 'anne', 'guillotin', 'denis', 'dubarry', 'more', 'janegrey', 'louis', 'mike', 'horseman'];
+  G.SEASON_AWARD_ORDER = ['committee', 'charles', 'chalk', 'sanson', 'lavoisier', 'raleigh', 'mary', 'marie', 'mikeSeason'];
+})();

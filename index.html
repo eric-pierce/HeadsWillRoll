@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Coup la Tête</title>
+  <meta name="description" content="The tribunal of our Sleeper chopped league: who's on the block, who's been chopped, and who earned glory or shame.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Spectral:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='5' y='2' width='3' height='28' fill='%23b8c2cf'/%3E%3Crect x='24' y='2' width='3' height='28' fill='%23b8c2cf'/%3E%3Crect x='3' y='1' width='26' height='3' fill='%23d4a64a'/%3E%3Cpath d='M8 7h16v4L8 15z' fill='%23c2272d'/%3E%3C/svg%3E">
+</head>
+<body>
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="brand">
+        <span class="brand-mark">Coup la Tête</span>
+        <span class="brand-league" id="league-name">Loading the tribunal…</span>
+      </div>
+      <div class="masthead-actions">
+        <span class="week-chip" id="week-chip" hidden></span>
+        <button class="btn btn-ghost" id="open-picker" type="button">Change league</button>
+      </div>
+    </div>
+    <nav class="tabs" aria-label="Sections">
+      <a href="#scaffold" data-tab="scaffold">The Scaffold</a>
+      <a href="#honours" data-tab="honours">Glory &amp; Shame</a>
+      <a href="#graveyard" data-tab="graveyard">The Graveyard</a>
+      <a href="#ledger" data-tab="ledger">Blood Ledger</a>
+      <a href="#looting" data-tab="looting">The Looting</a>
+      <a href="#hall" data-tab="hall">Hall of Heads</a>
+    </nav>
+  </header>
+
+  <div class="demo-banner" id="demo-banner" hidden>
+    You’re looking at a demo league with made-up teams.
+    <button class="linkish" type="button" data-open-picker>Connect your Sleeper league</button>
+  </div>
+
+  <main id="app">
+    <section id="scaffold" class="view" data-view="scaffold"></section>
+    <section id="honours" class="view" data-view="honours" hidden></section>
+    <section id="graveyard" class="view" data-view="graveyard" hidden></section>
+    <section id="ledger" class="view" data-view="ledger" hidden></section>
+    <section id="looting" class="view" data-view="looting" hidden></section>
+    <section id="hall" class="view" data-view="hall" hidden></section>
+  </main>
+
+  <footer class="colophon">
+    <p>Live data from the <a href="https://docs.sleeper.com/" target="_blank" rel="noopener">Sleeper API</a>. The last guillotining in France was on 10 September 1977, and the death penalty there was abolished in 1981. Only fantasy rosters are harmed here.</p>
+  </footer>
+
+  <dialog class="picker" id="picker" aria-labelledby="picker-title">
+    <form method="dialog" class="picker-close"><button class="btn btn-ghost" aria-label="Close">Close</button></form>
+    <h2 id="picker-title">Summon a league before the tribunal</h2>
+    <form id="form-league" class="picker-form">
+      <label for="league-id">Sleeper league ID</label>
+      <p class="hint">It’s the long number in your league’s web address: sleeper.com/leagues/<b>123456789012345678</b>/…</p>
+      <div class="row">
+        <input id="league-id" name="league" inputmode="numeric" autocomplete="off" placeholder="1180000000000000000" required>
+        <button class="btn btn-blood" type="submit">Open league</button>
+      </div>
+    </form>
+    <div class="or"><span>or find it by username</span></div>
+    <form id="form-user" class="picker-form">
+      <label for="username">Your Sleeper username</label>
+      <div class="row">
+        <input id="username" name="username" autocomplete="off" placeholder="citizen_capet" required>
+        <button class="btn" type="submit">Find leagues</button>
+      </div>
+    </form>
+    <ul class="league-list" id="league-list"></ul>
+    <p class="picker-error" id="picker-error" role="alert" hidden></p>
+    <p class="hint"><button class="linkish" type="button" id="use-demo">Show the demo league instead</button></p>
+  </dialog>
+
+  <script src="config.js"></script>
+  <script src="js/history.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/demo.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
