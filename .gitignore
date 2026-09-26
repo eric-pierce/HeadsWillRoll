@@ -1,0 +1,10 @@
+# Python virtual environment (not needed for the site)
+bin/
+include/
+lib/
+lib64/
+pyvenv.cfg
+.venv/
+venv/
+
+.DS_Store
