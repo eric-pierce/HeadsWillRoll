@@ -323,10 +323,11 @@
     const stones = M.chops.slice().reverse().map((c) => {
       const t = M.teams[c.rid];
       const fig = G.FIGURES[c.fig];
-      const beard = c.row && c.row.top ? `<p class="rip">Their best starter, ${esc(M.pname(c.row.top.pid))}, scored ${fmt(c.row.top.pts)}. He did nothing wrong.</p>` : '';
+      const beard = c.row && c.row.top ? `<p class="rip">Their best starter, ${esc(M.pname(c.row.top.pid))}, scored ${fmt(c.row.top.pts)} and did nothing wrong.</p>` : '';
       return `
         <article class="stone">
           <span class="ord">The ${ordinal(c.order)} head · Week ${c.week}</span>
+          ${c.unofficial ? '<span class="tag fail">Pending: Sleeper hasn’t made this chop official yet</span>' : ''}
           <h3>${esc(t.name)}</h3>
           <span class="mgr">${esc(t.manager)}</span>
           <span class="score">${fmt(c.pts)} <small>pts</small></span>
@@ -371,6 +372,7 @@
           ${cells}
           <td>${fmt(L.total)}</td><td>${fmt(L.avg)}</td><td>${fmt(L.best)}</td><td>${fmt(L.worst)}</td>
           <td>${L.bottom3}</td><td>${t.alive || L.weeks > 1 ? (isNaN(L.cushion) ? '—' : fmt(L.cushion)) : '—'}</td>
+          <td>${L.won}/${L.placed}</td>
           <td>$${Math.max(0, M.budget - L.faab)}</td>
         </tr>`;
     }).join('');
@@ -390,7 +392,7 @@
           <table class="ledger">
             <thead><tr>
               <th>Team</th>${weeks.map((w) => `<th>W${w}</th>`).join('')}
-              <th>Total</th><th>Avg</th><th>Best</th><th>Worst</th><th title="Bottom-three finishes survived">Bot 3</th><th title="Average points above the chopped team">Cushion</th><th>FAAB left</th>
+              <th>Total</th><th>Avg</th><th>Best</th><th>Worst</th><th title="Bottom-three finishes survived">Bot 3</th><th title="Average points above the chopped team">Cushion</th><th title="Waiver claims won out of bids placed">Bids won</th><th>FAAB left</th>
             </tr></thead>
             <tbody>${rowsHtml}</tbody>
           </table>
@@ -399,36 +401,118 @@
   }
 
   // ── The Looting ────────────────────────────
+  let lootTeam = '';
+  const REASON_LABEL = { won: 'Won', outbid: 'Outbid', roster: 'Roster full', budget: 'Not enough FAAB', other: 'Failed' };
+
+  function bidSheet(sh) {
+    const w = sh.winner;
+    const header = `
+      <div class="sheet-head">
+        <div class="what">
+          <b>${esc(M.pname(sh.pid))}</b> <span class="sub">${esc(M.pos(sh.pid) || '')} ${esc(M.pteam(sh.pid))}</span>
+          ${sh.looted ? `<span class="tag corpse">from the corpse of ${tname(sh.looted.rid)}</span>` : ''}
+          <div class="sub">${sh.bids.length} bid${sh.bids.length === 1 ? '' : 's'} from ${sh.teams} team${sh.teams === 1 ? '' : 's'}${w ? (sh.runnerUp ? (sh.overpay === 0 ? ' · won on a tiebreak' : ` · won by $${sh.overpay} over the next bid`) : ' · no rival bids') : ' · unclaimed'}</div>
+        </div>
+        <span class="bid">${w ? `$${w.bid}` : '—'}</span>
+      </div>`;
+    const rows = sh.bids.map((b) => {
+      const mine = lootTeam && String(b.rid) === lootTeam;
+      let tag;
+      if (b.reason === 'won') tag = '<span class="tag won">Won</span>';
+      else if (b.reason === 'outbid') tag = `<span class="tag lost">${b.short === 0 ? 'Lost tiebreak' : b.short != null ? `Outbid by $${b.short}` : 'Outbid'}</span>`;
+      else tag = `<span class="tag fail" title="${esc(b.note)}">${REASON_LABEL[b.reason]}</span>`;
+      return `
+        <li class="bidrow${mine ? ' mine' : ''}${b.reason === 'won' ? ' is-won' : ''}">
+          ${avatar(b.rid)}
+          <span class="who"><b>${tname(b.rid)}</b>${b.drops.length ? `<span>would drop ${b.drops.map((p) => esc(M.pname(p))).join(', ')}</span>` : ''}</span>
+          ${tag}
+          <span class="amt">$${b.bid}</span>
+        </li>`;
+    }).join('');
+    return `<article class="sheet">${header}<ol class="bids">${rows}</ol></article>`;
+  }
+
   function renderLooting() {
     const el = $('#looting');
-    const head = `
-      <div class="sec-head"><div>
-        <span class="eyebrow">Waivers &amp; free agents</span>
-        <h2>The Looting</h2>
-        <p>When a team is chopped, its whole roster goes to waivers. By old custom, the executioner kept the belongings of the condemned. Players marked <span class="tag corpse">from the corpse</span> came off a chopped roster.</p>
-      </div></div>`;
-    if (!M.moves.length) {
-      el.innerHTML = head + `<div class="empty"><b>Nothing looted yet.</b>Waiver claims show up here once they process.</div>`;
-      return;
+    const f = lootTeam;
+    const sheets = M.sheets.filter((sh) => !f || sh.bids.some((b) => String(b.rid) === f));
+    const fas = M.moves.filter((m) => m.type === 'free_agent' && (!f || String(m.rid) === f));
+    const teamsSorted = M.allRids.slice().sort((a, b) => M.teams[a].name.localeCompare(M.teams[b].name));
+
+    const allBids = M.sheets.reduce((n, sh) => n + sh.bids.length, 0);
+    const wins = M.sheets.filter((sh) => sh.winner).length;
+    const contested = M.sheets.filter((sh) => sh.teams >= 2).length;
+    const hottest = M.sheets.slice().sort((a, b) => b.teams - a.teams)[0];
+    let summary;
+    if (f) {
+      const L = M.ledger[f];
+      summary = `
+        <div class="tally">
+          <div><span class="eyebrow">Bids placed</span><span class="big">${L.placed}</span></div>
+          <div><span class="eyebrow">Claims won</span><span class="big">${L.won}</span></div>
+          <div><span class="eyebrow">Bids lost</span><span class="big">${L.outbid + L.roster}</span><span class="hint">${L.outbid} outbid · ${L.roster} roster full</span></div>
+          <div><span class="eyebrow">FAAB spent</span><span class="big">$${L.faab}</span><span class="hint">$${L.lostDollars} bid on players they lost</span></div>
+        </div>`;
+    } else {
+      summary = `
+        <div class="tally">
+          <div><span class="eyebrow">Bids placed</span><span class="big">${allBids}</span></div>
+          <div><span class="eyebrow">Claims won</span><span class="big">${wins}</span></div>
+          <div><span class="eyebrow">Contested players</span><span class="big">${contested}</span></div>
+          <div><span class="eyebrow">Most wanted</span><span class="big">${hottest ? `${hottest.teams}<small> teams</small>` : '—'}</span>${hottest ? `<span class="hint">${esc(M.pname(hottest.pid))}</span>` : ''}</div>
+        </div>`;
     }
-    const byLeg = {};
-    for (const m of M.moves) (byLeg[m.leg] = byLeg[m.leg] || []).push(m);
-    const legs = Object.keys(byLeg).map(Number).sort((a, b) => b - a);
-    const html = legs.map((leg) => {
-      const items = byLeg[leg].slice().sort((a, b) => b.bid - a.bid).map((m) => `
-        <li class="loot">
-          ${avatar(m.rid)}
-          <div class="what">
-            <b>${esc(M.pname(m.pid))}</b> <span class="sub">${esc(M.pos(m.pid) || '')} ${esc(M.pteam(m.pid))}</span>
-            ${m.looted ? `<span class="tag corpse">from the corpse of ${tname(m.looted.rid)}</span>` : m.type === 'free_agent' ? '<span class="tag fa">free agent</span>' : ''}
-            <div class="sub">to ${tname(m.rid)}${m.drops.length ? ` · dropped ${m.drops.map((p) => esc(M.pname(p))).join(', ')}` : ''}</div>
-          </div>
-          <span class="bid">${m.type === 'waiver' ? `$${m.bid}` : ''}</span>
-        </li>`).join('');
-      const spent = byLeg[leg].reduce((s, m) => s + m.bid, 0);
-      return `<div class="loot-week"><h3>Week ${leg} <span class="hint">· $${spent} spent</span></h3><ol class="loot-list">${items}</ol></div>`;
+
+    const legs = [...new Set([...sheets.map((sh) => sh.leg), ...fas.map((m) => m.leg)])].sort((a, b) => b - a);
+    const weeks = legs.map((leg) => {
+      const ws = sheets.filter((sh) => sh.leg === leg);
+      const contestedHere = ws.filter((sh) => sh.bids.length > 1 || !sh.winner);
+      const simple = ws.filter((sh) => sh.bids.length === 1 && sh.winner);
+      const faHere = fas.filter((m) => m.leg === leg);
+      const spent = ws.reduce((n, sh) => n + (sh.winner ? sh.winner.bid : 0), 0);
+      return `
+        <div class="loot-week">
+          <h3>Week ${leg} <span class="hint">· ${ws.reduce((n, sh) => n + sh.bids.length, 0)} bids · $${spent} spent</span></h3>
+          ${contestedHere.length ? `<div class="sheets">${contestedHere.map(bidSheet).join('')}</div>` : ''}
+          ${simple.length ? `
+            <h4 class="loot-sub">Uncontested claims</h4>
+            <ol class="loot-list">${simple.map((sh) => `
+              <li class="loot">${avatar(sh.winner.rid)}
+                <div class="what"><b>${esc(M.pname(sh.pid))}</b> <span class="sub">${esc(M.pos(sh.pid) || '')} ${esc(M.pteam(sh.pid))}</span>
+                  ${sh.looted ? `<span class="tag corpse">from the corpse of ${tname(sh.looted.rid)}</span>` : ''}
+                  <div class="sub">to ${tname(sh.winner.rid)}${sh.winner.drops.length ? ` · dropped ${sh.winner.drops.map((p) => esc(M.pname(p))).join(', ')}` : ''}</div></div>
+                <span class="bid">$${sh.winner.bid}</span></li>`).join('')}</ol>` : ''}
+          ${faHere.length ? `
+            <h4 class="loot-sub">Free agent pickups</h4>
+            <ol class="loot-list">${faHere.map((m) => `
+              <li class="loot">${avatar(m.rid)}
+                <div class="what"><b>${esc(M.pname(m.pid))}</b> <span class="sub">${esc(M.pos(m.pid) || '')} ${esc(M.pteam(m.pid))}</span>
+                  ${m.looted ? `<span class="tag corpse">from the corpse of ${tname(m.looted.rid)}</span>` : ''}
+                  <div class="sub">to ${tname(m.rid)}${m.drops.length ? ` · dropped ${m.drops.map((p) => esc(M.pname(p))).join(', ')}` : ''}</div></div>
+                <span class="bid"></span></li>`).join('')}</ol>` : ''}
+        </div>`;
     }).join('');
-    el.innerHTML = head + `<div class="loot-weeks">${html}</div>`;
+
+    el.innerHTML = `
+      <div>
+        <div class="sec-head">
+          <div>
+            <span class="eyebrow">Waivers &amp; free agents</span>
+            <h2>The Looting</h2>
+            <p>Every waiver bid, won and lost. When a team is chopped, its whole roster goes to waivers, and by old custom the executioner kept the belongings of the condemned. <span class="tag corpse">from the corpse</span> marks a player who came off a chopped roster.</p>
+          </div>
+          <div class="loot-filter">
+            <label for="loot-team">Bidding history for</label>
+            <select id="loot-team">
+              <option value="">All teams</option>
+              ${teamsSorted.map((rid) => `<option value="${rid}"${String(rid) === f ? ' selected' : ''}>${tname(rid)}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+        ${summary}
+      </div>
+      ${weeks ? `<div class="loot-weeks">${weeks}</div>` : `<div class="empty"><b>Nothing looted yet.</b>${f ? 'This team hasn’t placed a waiver bid or picked up a free agent.' : 'Waiver claims show up here once they process.'}</div>`}`;
+    $('#loot-team', el).addEventListener('change', (e) => { lootTeam = e.target.value; renderLooting(); });
   }
 
   // ── Hall of Heads ──────────────────────────
@@ -436,7 +520,7 @@
     const el = $('#hall');
     const named = {};
     for (const [id, def] of Object.entries(G.AWARDS)) (named[def.fig] = named[def.fig] || []).push(def);
-    const order = ['marie', 'louis', 'robespierre', 'danton', 'lavoisier', 'dubarry', 'corday', 'anne', 'mary', 'charles', 'more', 'raleigh', 'janegrey', 'denis', 'paine', 'guillotin', 'sanson', 'committee', 'mike', 'horseman', 'djandoubi'];
+    const order = ['marie', 'louis', 'robespierre', 'danton', 'lavoisier', 'dubarry', 'corday', 'anne', 'mary', 'charles', 'more', 'raleigh', 'janegrey', 'denis', 'paine', 'guillotin', 'sanson', 'committee', 'mike', 'horseman', 'necklace', 'assignat', 'varennes', 'conciergerie', 'talleyrand', 'djandoubi'];
     const cards = order.map((k) => {
       const f = G.FIGURES[k];
       const aw = (named[k] || []).map((d) => `<span class="pill ${d.pol}">${esc(d.title)}</span>`).join('');

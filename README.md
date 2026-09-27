@@ -41,6 +41,10 @@ It's plain static files with no build step and no API key. Any static host works
   The NFL player database is cached in the browser for a day.
 - `js/engine.js` replays the season: the lowest scorer among survivors is chopped each week.
   If Sleeper has already emptied a roster, that decides tie-breaks and stat corrections.
+- Chops come from Sleeper's own `chopped` transactions, which list the eliminated roster and every
+  player released. If a chop hasn't been recorded yet, the lowest scorer is marked as pending.
+- Waiver bids come from the same transactions feed. Failed claims are kept with Sleeper's reason
+  (outbid, or roster full), so The Looting shows every bid placed, not just the winners.
 - `js/history.js` holds the historical figures and award definitions. Edit it to add awards.
 - `js/demo.js` generates a fictional league so the site has something to show before you connect one.
 

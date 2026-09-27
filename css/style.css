@@ -300,6 +300,34 @@ table.ledger { border-collapse: collapse; width: 100%; font-size: 14px; }
 .tag.fa { background: var(--night-3); color: var(--steel); }
 .loot .bid { font: 600 17px var(--mono); color: var(--brass); text-align: right; }
 
+/* Bid sheets */
+.loot-filter { display: grid; gap: 4px; font-size: 13px; color: var(--bone-dim); }
+.loot-filter select {
+  background: var(--night-2); color: var(--bone); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 8px 10px; font: inherit; font-size: 15px; max-width: 100%;
+}
+.loot-sub { margin: 18px 0 6px; font: 600 11px var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--steel-dim); }
+.sheets { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 14px; }
+.sheet { background: var(--night-2); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.sheet-head { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
+.sheet-head .what { min-width: 0; }
+.sheet-head .what b { font-weight: 500; }
+.sheet-head .sub { font-size: 13px; color: var(--bone-faint); }
+.sheet-head .bid { font: 600 20px var(--mono); color: var(--brass); }
+.bids { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.bidrow { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto 3.4em; gap: 8px; align-items: center; padding: 5px 6px; border-radius: 3px; font-size: 14px; }
+.bidrow .avatar { width: 24px; height: 24px; font-size: 10px; }
+.bidrow .who { min-width: 0; }
+.bidrow .who b { font-weight: 500; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bidrow .who span { display: block; font-size: 12px; color: var(--bone-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bidrow .amt { text-align: right; font: 600 14px var(--mono); color: var(--bone-dim); }
+.bidrow.is-won .amt { color: var(--brass); }
+.bidrow.mine { outline: 1px solid var(--brass-deep); background: color-mix(in oklab, var(--brass) 10%, transparent); }
+.tag.won { background: color-mix(in oklab, var(--brass) 25%, transparent); color: var(--brass); margin: 0; }
+.tag.lost { background: var(--night-3); color: var(--steel); margin: 0; }
+.tag.fail { background: var(--blood-deep); color: #ffd4d6; margin: 0; }
+.stone .tag.fail { justify-self: center; }
+
 /* ── Hall of heads ────────────────────────── */
 .heads { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px 28px; }
 .head { display: grid; gap: 6px; align-content: start; padding-top: 14px; border-top: 1px solid var(--line); }
@@ -359,6 +387,10 @@ table.ledger { border-collapse: collapse; width: 100%; font-size: 14px; }
   .board-head .odds { font-size: 0; }
   .board-head .odds::after { content: 'Odds'; font-size: 11px; }
   .brow-live .now { display: none; }
+  .bidrow { grid-template-columns: 24px minmax(0, 1fr) 3.4em; row-gap: 3px; }
+  .bidrow .avatar { grid-row: 1 / span 2; }
+  .bidrow .tag { grid-column: 2; grid-row: 2; justify-self: start; }
+  .bidrow .amt { grid-column: 3; grid-row: 1 / span 2; }
   .slot-wrap { padding-left: 10px; }
   .brow .avatar { width: 30px; height: 30px; }
   .brand-mark { font-size: 26px; }

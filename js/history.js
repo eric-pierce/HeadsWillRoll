@@ -148,6 +148,41 @@
       method: 'Signing the warrants',
       fact: 'The twelve men who ran the Terror. They decided who lived and who rode the tumbril to the Place de la Révolution.',
     },
+    necklace: {
+      name: 'The Diamond Necklace Affair',
+      date: '1784–1786',
+      place: 'Versailles',
+      method: 'Fraud',
+      fact: 'A con artist convinced the Cardinal de Rohan that Marie Antoinette secretly wanted a necklace of some 650 diamonds. He signed for a fortune; the queen never saw it. She was innocent, but the scandal helped turn Paris against her.',
+    },
+    assignat: {
+      name: 'The Assignats',
+      date: '1789–1796',
+      place: 'Paris',
+      method: 'Inflation',
+      fact: 'Revolutionary paper money, backed by land seized from the Church. The government kept printing until the notes were nearly worthless. Plenty of money changed hands; very little was bought.',
+    },
+    varennes: {
+      name: 'The Flight to Varennes',
+      date: '20–21 June 1791',
+      place: 'Varennes-en-Argonne',
+      method: 'Recognised by a postmaster',
+      fact: 'Louis XVI and his family fled Paris in disguise for the eastern frontier. A postmaster recognised the king along the road, and the royal coach was stopped at Varennes, short of the loyal troops waiting further on. So close.',
+    },
+    conciergerie: {
+      name: 'The Conciergerie',
+      date: '1793–1794',
+      place: 'Île de la Cité, Paris',
+      method: 'Holding cell',
+      fact: 'The prison of the Revolutionary Tribunal, packed with the accused during the Terror and known as the antechamber of the guillotine. Marie Antoinette spent her last weeks there. There was never enough room.',
+    },
+    talleyrand: {
+      name: 'Charles-Maurice de Talleyrand',
+      date: '1754–1838',
+      place: 'Paris',
+      method: 'None. He died in bed at 84.',
+      fact: 'Bishop, revolutionary, Napoleon’s foreign minister, then minister to the restored king. He served every regime, outlived nearly all of them, and always seemed to get what he wanted for less than anyone else would pay.',
+    },
     djandoubi: {
       name: 'Hamida Djandoubi',
       date: '10 September 1977',
@@ -171,12 +206,17 @@
     anne: { title: 'The Swordsman of Calais', pol: 'glory', fig: 'anne', blurb: 'Best single-player performance in any starting lineup.' },
     denis: { title: 'Walked Off With His Head', pol: 'glory', fig: 'denis', blurb: 'Biggest jump in points from the week before.' },
     dubarry: { title: 'One More Moment', pol: 'shame', fig: 'dubarry', blurb: 'Chopped this week. Begged all the way up the scaffold.' },
-    more: { title: 'The Innocent Beard', pol: 'shame', fig: 'more', blurb: 'Best player on the chopped team. He did nothing wrong.' },
+    more: { title: 'The Innocent Beard', pol: 'shame', fig: 'more', blurb: 'Best player on the chopped team, who did nothing wrong.' },
     louis: { title: 'The Locksmith King', pol: 'shame', fig: 'louis', blurb: 'Worst lineup efficiency. Designed his own blade.' },
     mike: { title: 'The Headless Chicken', pol: 'shame', fig: 'mike', blurb: 'Most points left rotting on the bench.' },
     horseman: { title: 'The Headless Horseman', pol: 'shame', fig: 'horseman', blurb: 'Most starters who put up a zero, or an empty slot.' },
     janegrey: { title: 'The Nine Days’ Queen', pol: 'shame', fig: 'janegrey', blurb: 'Last week’s top scorer, now in the bottom half.' },
+    necklace: { title: 'The Diamond Necklace', pol: 'shame', fig: 'necklace', blurb: 'Biggest overpay: winning bid minus the next best bid.' },
+    varennes: { title: 'The Flight to Varennes', pol: 'shame', fig: 'varennes', blurb: 'Lost a player by the smallest margin.' },
+    talleyrand: { title: 'The Talleyrand', pol: 'glory', fig: 'talleyrand', blurb: 'Cheapest win on a player at least three teams bid on.' },
     // Season-long
+    assignat: { title: 'Worthless Assignats', pol: 'shame', fig: 'assignat', blurb: 'Most money bid on players they didn’t get.' },
+    conciergerie: { title: 'No Room in the Conciergerie', pol: 'shame', fig: 'conciergerie', blurb: 'Most waiver claims that failed because the roster was full.' },
     committee: { title: 'Committee of Public Safety', pol: 'glory', fig: 'committee', blurb: 'Most total points among the living.' },
     charles: { title: 'The Two Shirts', pol: 'glory', fig: 'charles', blurb: 'Most consistent scorer. Never lets them see you shiver.' },
     chalk: { title: 'Luxembourg Prison Regular', pol: 'glory', fig: 'paine', blurb: 'Most narrow escapes: finished one spot above the chopped team.' },
@@ -188,6 +228,6 @@
     mikeSeason: { title: 'Eighteen Months Headless', pol: 'shame', fig: 'mike', blurb: 'Most total bench points this season.' },
   };
 
-  G.WEEKLY_AWARD_ORDER = ['robespierre', 'paine', 'anne', 'guillotin', 'denis', 'dubarry', 'more', 'janegrey', 'louis', 'mike', 'horseman'];
-  G.SEASON_AWARD_ORDER = ['committee', 'charles', 'chalk', 'sanson', 'lavoisier', 'raleigh', 'mary', 'marie', 'mikeSeason'];
+  G.WEEKLY_AWARD_ORDER = ['robespierre', 'paine', 'anne', 'guillotin', 'denis', 'talleyrand', 'dubarry', 'more', 'janegrey', 'louis', 'mike', 'horseman', 'necklace', 'varennes'];
+  G.SEASON_AWARD_ORDER = ['committee', 'charles', 'chalk', 'sanson', 'lavoisier', 'talleyrand', 'raleigh', 'mary', 'marie', 'necklace', 'assignat', 'varennes', 'conciergerie', 'mikeSeason'];
 })();

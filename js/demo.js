@@ -90,8 +90,11 @@
     let released = []; // players dumped by the last chop
 
     for (let w = 1; w <= WEEK_NOW; w++) {
-      // Waivers run at the start of each week, feasting on the last chopped roster.
-      const tx = [];
+      // Waivers run after each chop, feasting on the chopped roster. Like Sleeper, the run
+      // shares a leg with the chop that preceded it; losing bids are kept as failed claims.
+      const tx = transactions[w - 1] || [];
+      const leg = w - 1;
+      const stamp = () => leg * 1e6 + 5e5 + tx.length;
       if (w > 1) {
         const bidders = [...alive].sort(() => r() - 0.5).slice(0, 5 + Math.floor(r() * 5));
         const targets = [...released, ...[...free].sort(() => r() - 0.5).slice(0, 6)].filter((id) => free.has(id));
@@ -106,10 +109,21 @@
           ro.players = ro.players.filter((x) => x !== dropId).concat(id);
           free.delete(id); free.add(dropId);
           ro.settings.waiver_budget_used += bid;
-          tx.push({ type: 'waiver', status: 'complete', adds: { [id]: rid }, drops: { [dropId]: rid }, settings: { waiver_bid: bid }, leg: w, created: w * 1e6 + tx.length, status_updated: w * 1e6 + tx.length });
+          tx.push({ type: 'waiver', status: 'complete', adds: { [id]: rid }, drops: { [dropId]: rid }, settings: { waiver_bid: bid }, leg, created: stamp(), status_updated: stamp() });
+          // Rivals who wanted him too.
+          const rivals = [...alive].filter((x) => x !== rid).sort(() => r() - 0.5).slice(0, Math.floor(r() * (released.includes(id) ? 7 : 3)));
+          for (const x of rivals) {
+            const full = r() < 0.12;
+            const lost = full ? Math.round(bid * (0.6 + r() * 0.8)) : Math.max(0, bid - 1 - Math.floor(r() * Math.max(1, bid)));
+            tx.push({
+              type: 'waiver', status: 'failed', adds: { [id]: x }, drops: null, settings: { waiver_bid: lost }, leg, created: stamp(), status_updated: stamp(),
+              metadata: { notes: full ? 'Unfortunately, your roster will have too many players after this transaction.' : 'This player was claimed by another owner.' },
+            });
+          }
         }
       }
-      transactions[w] = tx;
+      if (w > 1) transactions[w - 1] = tx;
+      transactions[w] = transactions[w] || [];
 
       // Live week: some clubs have finished, some are mid-game, the rest haven't kicked off.
       const clubState = (club) => { const i = CLUBS.indexOf(club); return i < 14 ? 'post' : i < 20 ? 'in' : 'pre'; };
@@ -130,6 +144,10 @@
         alive.delete(victim.roster_id);
         const ro = rosters[victim.roster_id - 1];
         released = ro.players.slice();
+        transactions[w].push({
+          type: 'chopped', status: 'complete', adds: null, roster_ids: [victim.roster_id], leg: w, created: w * 1e6 + 1e5,
+          drops: Object.fromEntries(released.map((id) => [id, victim.roster_id])),
+        });
         released.forEach((id) => free.add(id));
         ro.players = [];
       }
