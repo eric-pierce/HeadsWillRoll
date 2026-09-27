@@ -5,5 +5,5 @@
 // league picker and demo league are hidden.
 // Leave it empty ('') to let visitors pick any league.
 window.COUP_CONFIG = {
-  leagueId: '',
+  leagueId: '1389705627147726848',
 };
