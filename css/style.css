@@ -331,12 +331,15 @@ table.ledger { border-collapse: collapse; width: 100%; font-size: 14px; }
 /* Week shortcuts on The Looting */
 .week-jump {
   position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--mast-h, 96px)); z-index: 10;
-  display: flex; gap: 6px; align-items: center; overflow-x: auto; scrollbar-width: none;
-  padding-block: 10px; margin-block: -10px; background: var(--night);
+  display: flex; gap: 8px; align-items: center; overflow-x: auto; scrollbar-width: none;
+  /* Bleed to the page edges like the masthead, keeping the buttons on the content edge. */
+  margin-inline: calc(-1 * var(--gutter)); padding: 10px var(--gutter);
+  background: color-mix(in oklab, var(--night) 92%, transparent);
+  backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line);
 }
 .week-jump::-webkit-scrollbar { display: none; }
-.week-jump span { flex: none; font: 600 11px var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--steel-dim); margin-right: 4px; }
+.week-jump span { flex: none; font: 600 11px var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--steel-dim); margin-right: 6px; }
 .week-jump button {
   flex: none; font: 600 13px var(--mono); padding: 6px 10px; border-radius: var(--r); cursor: pointer;
   border: 1px solid var(--line); background: var(--night-2); color: var(--bone-dim);
