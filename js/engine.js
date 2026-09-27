@@ -278,8 +278,8 @@
         if (t.type !== 'waiver' || (t.status !== 'complete' && t.status !== 'failed') || !t.adds) continue;
         for (const [pid, rid] of Object.entries(t.adds)) {
           const key = `${leg}|${pid}`;
-          const sh = sheetMap[key] || (sheetMap[key] = { leg: Number(leg), pid, bids: [] });
-          sh.bids.push({
+          const sh = sheetMap[key] || (sheetMap[key] = { leg: Number(leg), pid, claims: [] });
+          sh.claims.push({
             rid, bid: +((t.settings && t.settings.waiver_bid) || 0), reason: reasonOf(t),
             note: (t.metadata && t.metadata.notes) || '', created: t.created || 0,
             drops: Object.entries(t.drops || {}).filter(([, r]) => r === rid).map(([p]) => p),
@@ -289,6 +289,15 @@
     }
     const sheets = Object.values(sheetMap);
     for (const sh of sheets) {
+      // A manager can file several claims on one player (usually with different drops). Once one
+      // wins, Sleeper fails the rest as "claimed by another owner". Collapse them to one bid per
+      // team: the winning claim if there is one, otherwise their highest.
+      const byTeam = {};
+      for (const c of sh.claims) (byTeam[c.rid] = byTeam[c.rid] || []).push(c);
+      sh.bids = Object.values(byTeam).map((cs) => {
+        const pick = cs.find((c) => c.reason === 'won') || cs.slice().sort((a, b) => b.bid - a.bid || a.created - b.created)[0];
+        return { ...pick, bid: pick.reason === 'won' ? pick.bid : Math.max(...cs.map((c) => c.bid)), claims: cs.length };
+      });
       sh.bids.sort((a, b) => (b.reason === 'won') - (a.reason === 'won') || b.bid - a.bid || a.created - b.created);
       sh.winner = sh.bids.find((b) => b.reason === 'won') || null;
       sh.teams = new Set(sh.bids.map((b) => b.rid)).size;
@@ -476,7 +485,7 @@
       const l = ledger[seasonAwards.assignat.rid];
       seasonAwards.assignat.detail = `Across ${l.lostPlayers} player${l.lostPlayers === 1 ? '' : 's'}, with ${l.won} claim${l.won === 1 ? '' : 's'} won all season.`;
     }
-    make('conciergerie', rank(everyone, 'roster', 'desc', (l) => l.roster > 0), (l) => String(l.roster), 'claims failed, roster full');
+    make('conciergerie', rank(everyone, 'roster', 'desc', (l) => l.roster > 0), (l) => String(l.roster), 'players lost to a full roster');
     const bids = everyone.filter((l) => l.bigBid).sort((a, b) => b.bigBid.bid - a.bigBid.bid);
     if (bids.length) {
       seasonAwards.raleigh = {

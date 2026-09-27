@@ -216,7 +216,7 @@
     talleyrand: { title: 'The Talleyrand', pol: 'glory', fig: 'talleyrand', blurb: 'Cheapest win on a player at least three teams bid on.' },
     // Season-long
     assignat: { title: 'Worthless Assignats', pol: 'shame', fig: 'assignat', blurb: 'Most money bid on players they didn’t get.' },
-    conciergerie: { title: 'No Room in the Conciergerie', pol: 'shame', fig: 'conciergerie', blurb: 'Most waiver claims that failed because the roster was full.' },
+    conciergerie: { title: 'No Room in the Conciergerie', pol: 'shame', fig: 'conciergerie', blurb: 'Most players lost on waivers because the roster was full.' },
     committee: { title: 'Committee of Public Safety', pol: 'glory', fig: 'committee', blurb: 'Most total points among the living.' },
     charles: { title: 'The Two Shirts', pol: 'glory', fig: 'charles', blurb: 'Most consistent scorer. Never lets them see you shiver.' },
     chalk: { title: 'Luxembourg Prison Regular', pol: 'glory', fig: 'paine', blurb: 'Most narrow escapes: finished one spot above the chopped team.' },

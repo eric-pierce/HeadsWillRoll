@@ -411,7 +411,7 @@
         <div class="what">
           <b>${esc(M.pname(sh.pid))}</b> <span class="sub">${esc(M.pos(sh.pid) || '')} ${esc(M.pteam(sh.pid))}</span>
           ${sh.looted ? `<span class="tag corpse">from the corpse of ${tname(sh.looted.rid)}</span>` : ''}
-          <div class="sub">${sh.bids.length} bid${sh.bids.length === 1 ? '' : 's'} from ${sh.teams} team${sh.teams === 1 ? '' : 's'}${w ? (sh.runnerUp ? (sh.overpay === 0 ? ' · won on a tiebreak' : ` · won by $${sh.overpay} over the next bid`) : ' · no rival bids') : ' · unclaimed'}</div>
+          <div class="sub">${sh.teams} team${sh.teams === 1 ? '' : 's'} bid${sh.claims.length > sh.teams ? ` (${sh.claims.length} claims)` : ''}${w ? (sh.runnerUp ? (sh.overpay === 0 ? ' · won on a tiebreak' : ` · won by $${sh.overpay} over the next bid`) : ' · no rival bids') : ' · unclaimed'}</div>
         </div>
         <span class="bid">${w ? `$${w.bid}` : '—'}</span>
       </div>`;
@@ -424,7 +424,7 @@
       return `
         <li class="bidrow${mine ? ' mine' : ''}${b.reason === 'won' ? ' is-won' : ''}">
           ${avatar(b.rid)}
-          <span class="who"><b>${tname(b.rid)}</b>${b.drops.length ? `<span>would drop ${b.drops.map((p) => esc(M.pname(p))).join(', ')}</span>` : ''}</span>
+          <span class="who"><b>${tname(b.rid)}</b>${b.drops.length || b.claims > 1 ? `<span>${[b.claims > 1 ? `${b.claims} claims` : '', b.drops.length ? `${b.reason === 'won' ? 'dropped' : 'would drop'} ${b.drops.map((p) => esc(M.pname(p))).join(', ')}` : ''].filter(Boolean).join(' · ')}</span>` : ''}</span>
           ${tag}
           <span class="amt">$${b.bid}</span>
         </li>`;
@@ -466,12 +466,12 @@
     const legs = [...new Set([...sheets.map((sh) => sh.leg), ...fas.map((m) => m.leg)])].sort((a, b) => b - a);
     const weeks = legs.map((leg) => {
       const ws = sheets.filter((sh) => sh.leg === leg);
-      const contestedHere = ws.filter((sh) => sh.bids.length > 1 || !sh.winner);
-      const simple = ws.filter((sh) => sh.bids.length === 1 && sh.winner);
+      const contestedHere = ws.filter((sh) => sh.bids.length > 1 || !sh.winner || sh.claims.length > 1);
+      const simple = ws.filter((sh) => sh.bids.length === 1 && sh.winner && sh.claims.length === 1);
       const faHere = fas.filter((m) => m.leg === leg);
       const spent = ws.reduce((n, sh) => n + (sh.winner ? sh.winner.bid : 0), 0);
       return `
-        <div class="loot-week">
+        <div class="loot-week" id="loot-wk-${leg}">
           <h3>Week ${leg} <span class="hint">· ${ws.reduce((n, sh) => n + sh.bids.length, 0)} bids · $${spent} spent</span></h3>
           ${contestedHere.length ? `<div class="sheets">${contestedHere.map(bidSheet).join('')}</div>` : ''}
           ${simple.length ? `
@@ -511,8 +511,13 @@
         </div>
         ${summary}
       </div>
+      ${legs.length > 1 ? `<nav class="week-jump" aria-label="Jump to week"><span>Jump to</span>${legs.map((leg) => `<button type="button" data-jump="${leg}">Wk ${leg}</button>`).join('')}</nav>` : ''}
       ${weeks ? `<div class="loot-weeks">${weeks}</div>` : `<div class="empty"><b>Nothing looted yet.</b>${f ? 'This team hasn’t placed a waiver bid or picked up a free agent.' : 'Waiver claims show up here once they process.'}</div>`}`;
     $('#loot-team', el).addEventListener('change', (e) => { lootTeam = e.target.value; renderLooting(); });
+    $$('[data-jump]', el).forEach((b) => b.addEventListener('click', () => {
+      const target = $(`#loot-wk-${b.dataset.jump}`);
+      if (target) target.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    }));
   }
 
   // ── Hall of Heads ──────────────────────────
@@ -664,6 +669,12 @@
     }
   });
   function showPickerError(msg) { const p = $('#picker-error'); p.textContent = msg; p.hidden = false; }
+
+  const mast = $('.masthead');
+  const setMast = () => document.documentElement.style.setProperty('--mast-h', `${mast.offsetHeight}px`);
+  setMast();
+  window.addEventListener('resize', setMast);
+  if (window.ResizeObserver) new ResizeObserver(setMast).observe(mast);
 
   window.addEventListener('hashchange', () => { showTab(); window.scrollTo({ top: 0 }); });
 

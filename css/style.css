@@ -328,6 +328,22 @@ table.ledger { border-collapse: collapse; width: 100%; font-size: 14px; }
 .tag.fail { background: var(--blood-deep); color: #ffd4d6; margin: 0; }
 .stone .tag.fail { justify-self: center; }
 
+/* Week shortcuts on The Looting */
+.week-jump {
+  position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--mast-h, 96px)); z-index: 10;
+  display: flex; gap: 6px; align-items: center; overflow-x: auto; scrollbar-width: none;
+  padding-block: 10px; margin-block: -10px; background: var(--night);
+  border-bottom: 1px solid var(--line);
+}
+.week-jump::-webkit-scrollbar { display: none; }
+.week-jump span { flex: none; font: 600 11px var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--steel-dim); margin-right: 4px; }
+.week-jump button {
+  flex: none; font: 600 13px var(--mono); padding: 6px 10px; border-radius: var(--r); cursor: pointer;
+  border: 1px solid var(--line); background: var(--night-2); color: var(--bone-dim);
+}
+.week-jump button:hover { color: var(--bone); border-color: var(--steel-dim); }
+.loot-week { scroll-margin-top: calc(env(safe-area-inset-top, 0px) + var(--mast-h, 96px) + 64px); }
+
 /* ── Hall of heads ────────────────────────── */
 .heads { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px 28px; }
 .head { display: grid; gap: 6px; align-content: start; padding-top: 14px; border-top: 1px solid var(--line); }
