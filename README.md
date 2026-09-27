@@ -1,4 +1,4 @@
-# Coup la Tête
+# Heads Will Roll
 
 A tribunal for our Sleeper chopped (guillotine) league. It pulls live data from the public
 Sleeper API in the browser, works out who was chopped each week, and hands out weekly and

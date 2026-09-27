@@ -552,7 +552,7 @@
   // ── Frame ──────────────────────────────────
   function renderAll() {
     $('#league-name').textContent = `${M.league.name} · ${M.league.season}`;
-    document.title = `Coup la Tête · ${M.league.name}`;
+    document.title = `Heads Will Roll · ${M.league.name}`;
     const chip = $('#week-chip');
     if (M.live) {
       chip.hidden = false;

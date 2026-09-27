@@ -155,7 +155,7 @@
 
     const users = rosters.map((ro, i) => ({ user_id: `u${i + 1}`, display_name: MANAGERS[i], avatar: null, metadata: { team_name: TEAM_NAMES[i] } }));
     const league = {
-      league_id: 'demo', name: 'Coup la Tête (Demo League)', season: '2026', status: 'in_season', total_rosters: N,
+      league_id: 'demo', name: 'Heads Will Roll (Demo League)', season: '2026', status: 'in_season', total_rosters: N,
       settings: { start_week: 1, playoff_week_start: 0, waiver_budget: 100 },
       roster_positions: [...SLOTS, 'BN', 'BN', 'BN', 'BN', 'BN', 'BN'],
     };
