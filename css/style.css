@@ -387,6 +387,9 @@ table.ledger { border-collapse: collapse; width: 100%; font-size: 14px; }
 
 .colophon { color: var(--bone-faint); font-size: 13px; padding-block: 24px 40px; border-top: 1px solid var(--line); }
 .colophon a { color: var(--bone-dim); }
+.colophon .gh-link { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+.colophon .gh-link:hover { color: var(--bone); }
+.colophon .gh-link svg { flex: none; }
 
 /* ── Narrow screens ───────────────────────── */
 @media (max-width: 820px) {
