@@ -1,5 +1,7 @@
 # Heads Will Roll
 
+<img width="1134" height="731" alt="Screenshot 2026-09-27 at 6 41 54 PM" src="https://github.com/user-attachments/assets/3da04bc8-edf7-4160-a8a8-63de65caf48a" />
+
 A tribunal for our Sleeper chopped (guillotine) league. It pulls live data from the public
 Sleeper API in the browser, works out who was chopped each week, and hands out weekly and
 season-long awards named after famous beheadings (and a few famous escapes).
