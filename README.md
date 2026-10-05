@@ -60,3 +60,7 @@ During a live week, teams are ranked by projected final score:
 Projections and the schedule come from Sleeper's app endpoints on `api.sleeper.com`, which aren't
 officially documented. The game clock comes from ESPN's public scoreboard. Chop odds come from
 10,000 simulated finishes. Live data refreshes every 90 seconds.
+
+## AI Disclosure
+
+Unlike my other public repositories this project was 100% Claude Code generated over a brief session ahead of my first Guillotine league. I normally wouldn't even post it to GitHub because I truly didn't write it, but I personally found it fun and thought others may as well.
